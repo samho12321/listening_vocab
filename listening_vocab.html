@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Listening 考試詞彙學習 | 英音發音練習</title>
+<style>
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --card-hover: #273549;
+  --border: #334155;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent: #3b82f6;
+  --accent-light: #60a5fa;
+  --green: #22c55e;
+  --orange: #f59e0b;
+  --red: #ef4444;
+  --purple: #a855f7;
+  --pink: #ec4899;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-light), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 8px;
+  padding: 16px 24px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tab {
+  padding: 8px 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+
+.tab:hover { border-color: var(--accent); color: var(--text); }
+.tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+/* Content */
+.content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text-secondary); }
+
+/* Vocabulary Card */
+.vocab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.vocab-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.vocab-card:hover {
+  background: var(--card-hover);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.vocab-card .num {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(59,130,246,0.15);
+  color: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.vocab-card .info { flex: 1; min-width: 0; }
+
+.vocab-card .word {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.vocab-card .pos {
+  font-size: 0.75rem;
+  color: var(--accent-light);
+  margin-left: 4px;
+}
+
+.vocab-card .meaning {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.vocab-card .speak-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(59,130,246,0.2);
+  color: var(--accent-light);
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.vocab-card .speak-btn:hover { background: var(--accent); color: white; }
+.vocab-card .speak-btn.playing { background: var(--green); color: white; animation: pulse 1s infinite; }
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* Google Translate Link */
+.vocab-card .gt-link {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(168,85,247,0.2);
+  color: var(--purple);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  text-decoration: none;
+}
+
+.vocab-card .gt-link:hover { background: var(--purple); color: white; }
+
+/* Paragraph */
+.paragraph-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+}
+
+.paragraph-card .ref {
+  font-size: 0.8rem;
+  color: var(--orange);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.paragraph-card .text {
+  font-size: 1.1rem;
+  line-height: 2;
+  color: var(--text);
+  font-style: italic;
+}
+
+.paragraph-card .highlight {
+  background: rgba(245,158,11,0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--orange);
+}
+
+.paragraph-card .actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:hover { background: #2563eb; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); }
+
+/* Word Family Table */
+.family-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.family-table th {
+  background: var(--accent);
+  color: white;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.85rem;
+}
+
+.family-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+
+.family-table tr:hover td { background: rgba(59,130,246,0.08); }
+
+.family-table .root {
+  font-weight: 700;
+  color: var(--orange);
+}
+
+.word-cell {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.word-cell:hover { color: var(--accent-light); }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--green);
+  color: white;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.toast.show { opacity: 1; }
+
+/* Stats */
+.stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.stat {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 20px;
+}
+
+.stat .stat-num {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-light);
+}
+
+.stat .stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Settings */
+.settings-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.settings-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.accent-select {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.mode-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mode-btn {
+  padding: 6px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.mode-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .vocab-grid { grid-template-columns: 1fr; }
+  .tabs { padding: 16px 12px 0; }
+  .content { padding: 16px; }
+  .header { padding: 16px; }
+  .header h1 { font-size: 1.4rem; }
+}
+
+/* IPA tooltip */
+.ipa-tooltip {
+  font-size: 0.75rem;
+  color: var(--purple);
+  font-style: normal;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Listening 考試詞彙學習</h1>
+  <p>NTP 1B · Dict 7-12 · 120+ 詞彙 · 英式發音練習</p>
+</div>
+
+<div class="tabs" id="tabBar">
+  <button class="tab active" data-tab="all">全部詞彙</button>
+  <button class="tab" data-tab="dict7">Dict 7 · 食物</button>
+  <button class="tab" data-tab="dict8">Dict 8 · 烹調</button>
+  <button class="tab" data-tab="dict9">Dict 9 · 城市</button>
+  <button class="tab" data-tab="dict10">Dict 10 · 身體</button>
+  <button class="tab" data-tab="dict11">Dict 11 · 煩惱</button>
+  <button class="tab" data-tab="dict12">Dict 12 · 昆蟲</button>
+  <button class="tab" data-tab="reading">朗讀篇章</button>
+  <button class="tab" data-tab="wordfamily">詞性轉換</button>
+</div>
+
+<div class="content">
+
+  <!-- Settings -->
+  <div class="settings-row">
+    <span class="settings-label">發音:</span>
+    <select class="accent-select" id="accentSelect">
+      <option value="en-GB" selected>英式發音 (RP)</option>
+      <option value="en-US">美式發音</option>
+    </select>
+    <span class="settings-label">顯示模式:</span>
+    <div class="mode-toggle" id="modeToggle">
+      <button class="mode-btn active" data-mode="card">卡片</button>
+      <button class="mode-btn" data-mode="list">列表</button>
+    </div>
+  </div>
+
+  <input type="text" class="search-box" id="searchInput" placeholder="搜尋詞彙... (例如: celebrate, festival, delicious)">
+
+  <!-- Stats -->
+  <div class="stats" id="statsRow"></div>
+
+  <!-- All Sections -->
+  <div id="section-all" class="section active"></div>
+  <div id="section-dict7" class="section"></div>
+  <div id="section-dict8" class="section"></div>
+  <div id="section-dict9" class="section"></div>
+  <div id="section-dict10" class="section"></div>
+  <div id="section-dict11" class="section"></div>
+  <div id="section-dict12" class="section"></div>
+  <div id="section-reading" class="section"></div>
+  <div id="section-wordfamily" class="section"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const dictData = {
+  dict7: {
+    title: 'Dict 7 · Compulsory - Food (食物)',
+    words: [
+      {w:"festival", pos:"n.", m:"節日", ipa:"/ˈfestɪvl/"},
+      {w:"simply", pos:"adv.", m:"簡單地", ipa:"/ˈsɪmpli/"},
+      {w:"celebrate", pos:"v.", m:"慶祝", ipa:"/ˈselɪbreɪt/"},
+      {w:"trade", pos:"v.", m:"交易", ipa:"/treɪd/"},
+      {w:"parade", pos:"n.", m:"巡遊", ipa:"/pəˈreɪd/"},
+      {w:"glutinous", pos:"adj.", m:"黏的", ipa:"/ˈɡluːtɪnəs/"},
+      {w:"symbolizes", pos:"v.", m:"象徵", ipa:"/ˈsɪmbəlaɪzɪz/"},
+      {w:"togetherness", pos:"n.", m:"團結", ipa:"/təˈɡeðənəs/"},
+      {w:"displays", pos:"n.", m:"展示", ipa:"/dɪˈspleɪz/"},
+      {w:"temples", pos:"n.", m:"寺廟", ipa:"/ˈtemplz/"},
+      {w:"bread", pos:"n.", m:"麵包", ipa:"/bred/"},
+      {w:"rice", pos:"n.", m:"米飯", ipa:"/raɪs/"},
+      {w:"noodles", pos:"n.", m:"麵條", ipa:"/ˈnuːdlz/"},
+      {w:"hamburger", pos:"n.", m:"漢堡包", ipa:"/ˈhæmbɜːɡə/"},
+      {w:"sandwich", pos:"n.", m:"三文治", ipa:"/ˈsænwɪdʒ/"},
+      {w:"vegetable", pos:"n.", m:"蔬菜", ipa:"/ˈvedʒtəbl/"},
+      {w:"fruit", pos:"n.", m:"水果", ipa:"/fruːt/"},
+      {w:"soft drink", pos:"n.", m:"汽水", ipa:"/sɒft drɪŋk/"},
+      {w:"shrimp", pos:"n.", m:"蝦", ipa:"/ʃrɪmp/"},
+      {w:"French fries", pos:"n.", m:"薯條", ipa:"/frentʃ fraɪz/"}
+    ]
+  },
+  dict8: {
+    title: 'Dict 8 · Tastes & Cooking Methods (味道與烹調方法)',
+    words: [
+      {w:"bun snatching", pos:"n.phr.", m:"搶包山", ipa:"/bʌn ˈsnætʃɪŋ/"},
+      {w:"delicious", pos:"adj.", m:"美味的", ipa:"/dɪˈlɪʃəs/"},
+      {w:"feasts", pos:"n.", m:"盛宴", ipa:"/fiːsts/"},
+      {w:"decorate", pos:"v.", m:"裝飾", ipa:"/ˈdekəreɪt/"},
+      {w:"fireworks", pos:"n.", m:"煙花", ipa:"/ˈfaɪəwɜːks/"},
+      {w:"water fight", pos:"n.", m:"水戰", ipa:"/ˈwɔːtə faɪt/"},
+      {w:"Thanksgiving", pos:"n.", m:"感恩節", ipa:"/ˌθæŋksˈɡɪvɪŋ/"},
+      {w:"harvest", pos:"n.", m:"收穫", ipa:"/ˈhɑːvɪst/"},
+      {w:"gather", pos:"v.", m:"聚集", ipa:"/ˈɡæðə/"},
+      {w:"thankful", pos:"adj.", m:"感恩的", ipa:"/ˈθæŋkfl/"},
+      {w:"sweet", pos:"adj.", m:"甜的", ipa:"/swiːt/"},
+      {w:"sour", pos:"adj.", m:"酸的", ipa:"/ˈsaʊə/"},
+      {w:"bitter", pos:"adj.", m:"苦的", ipa:"/ˈbɪtə/"},
+      {w:"spicy", pos:"adj.", m:"辣的", ipa:"/ˈspaɪsi/"},
+      {w:"salty", pos:"adj.", m:"鹹的", ipa:"/ˈsɔːlti/"},
+      {w:"boil", pos:"v.", m:"煮", ipa:"/bɔɪl/"},
+      {w:"steam", pos:"v.", m:"蒸", ipa:"/stiːm/"},
+      {w:"deep fry", pos:"v.", m:"油炸", ipa:"/diːp fraɪ/"},
+      {w:"bake", pos:"v.", m:"烘焗", ipa:"/beɪk/"},
+      {w:"roast", pos:"v.", m:"烤", ipa:"/rəʊst/"}
+    ]
+  },
+  dict9: {
+    title: 'Dict 9 · Unit 7 - Exploring My City (探索城市)',
+    words: [
+      {w:"set off", pos:"phr.v.", m:"出發", ipa:"/set ɒf/"},
+      {w:"facilities", pos:"n.", m:"設施", ipa:"/fəˈsɪlətiz/"},
+      {w:"classic", pos:"adj.", m:"經典的", ipa:"/ˈklæsɪk/"},
+      {w:"travel", pos:"v.", m:"旅行", ipa:"/ˈtrævl/"},
+      {w:"peaceful", pos:"adj.", m:"平靜的", ipa:"/ˈpiːsfl/"},
+      {w:"historic", pos:"adj.", m:"歷史性的", ipa:"/hɪˈstɒrɪk/"},
+      {w:"explore", pos:"v.", m:"探索", ipa:"/ɪkˈsplɔː/"},
+      {w:"hotspot", pos:"n.", m:"熱點", ipa:"/ˈhɒtspɒt/"},
+      {w:"comfortable", pos:"adj.", m:"舒適的", ipa:"/ˈkʌmftəbl/"},
+      {w:"truly", pos:"adv.", m:"真正地", ipa:"/ˈtruːli/"},
+      {w:"red", pos:"adj.", m:"紅色", ipa:"/red/"},
+      {w:"orange", pos:"adj.", m:"橙色", ipa:"/ˈɒrɪndʒ/"},
+      {w:"yellow", pos:"adj.", m:"黃色", ipa:"/ˈjeləʊ/"},
+      {w:"green", pos:"adj.", m:"綠色", ipa:"/ɡriːn/"},
+      {w:"blue", pos:"adj.", m:"藍色", ipa:"/bluː/"},
+      {w:"purple", pos:"adj.", m:"紫色", ipa:"/ˈpɜːpl/"},
+      {w:"white", pos:"adj.", m:"白色", ipa:"/waɪt/"},
+      {w:"black", pos:"adj.", m:"黑色", ipa:"/blæk/"},
+      {w:"grey", pos:"adj.", m:"灰色", ipa:"/ɡreɪ/"},
+      {w:"brown", pos:"adj.", m:"棕色", ipa:"/braʊn/"}
+    ]
+  },
+  dict10: {
+    title: 'Dict 10 · Extra - Body Parts (身體部位)',
+    words: [
+      {w:"sunset", pos:"n.", m:"日落", ipa:"/ˈsʌnset/"},
+      {w:"satisfying", pos:"adj.", m:"令人滿意的", ipa:"/ˈsætɪsfaɪɪŋ/"},
+      {w:"staycation", pos:"n.", m:"宅度假", ipa:"/steɪˈkeɪʃn/"},
+      {w:"location", pos:"n.", m:"位置", ipa:"/ləʊˈkeɪʃn/"},
+      {w:"promotion", pos:"n.", m:"推廣", ipa:"/prəˈməʊʃn/"},
+      {w:"opposite", pos:"prep./n.", m:"對面/相反", ipa:"/ˈɒpəzɪt/"},
+      {w:"gorgeous", pos:"adj.", m:"華麗的", ipa:"/ˈɡɔːdʒəs/"},
+      {w:"dessert", pos:"n.", m:"甜品", ipa:"/dɪˈzɜːt/"},
+      {w:"discover", pos:"v.", m:"發現", ipa:"/dɪˈskʌvə/"},
+      {w:"amazing", pos:"adj.", m:"驚人的", ipa:"/əˈmeɪzɪŋ/"},
+      {w:"head", pos:"n.", m:"頭", ipa:"/hed/"},
+      {w:"shoulder", pos:"n.", m:"肩膀", ipa:"/ˈʃəʊldə/"},
+      {w:"knee", pos:"n.", m:"膝蓋", ipa:"/niː/"},
+      {w:"toe", pos:"n.", m:"腳趾", ipa:"/təʊ/"},
+      {w:"finger", pos:"n.", m:"手指", ipa:"/ˈfɪŋɡə/"},
+      {w:"stomach", pos:"n.", m:"胃/肚子", ipa:"/ˈstʌmək/"},
+      {w:"arm", pos:"n.", m:"手臂", ipa:"/ɑːm/"},
+      {w:"mouth", pos:"n.", m:"嘴巴", ipa:"/maʊθ/"},
+      {w:"neck", pos:"n.", m:"頸部", ipa:"/nek/"},
+      {w:"waist", pos:"n.", m:"腰部", ipa:"/weɪst/"}
+    ]
+  },
+  dict11: {
+    title: 'Dict 11 · Unit 8 - Teenage Problems (青少年煩惱)',
+    words: [
+      {w:"awful", pos:"adj.", m:"糟糕的", ipa:"/ˈɔːfl/"},
+      {w:"unkind", pos:"adj.", m:"不友善的", ipa:"/ʌnˈkaɪnd/"},
+      {w:"tease", pos:"v.", m:"取笑", ipa:"/tiːz/"},
+      {w:"mean", pos:"adj.", m:"刻薄的", ipa:"/miːn/"},
+      {w:"guilty", pos:"adj.", m:"內疚的", ipa:"/ˈɡɪlti/"},
+      {w:"ruin", pos:"v.", m:"毀壞", ipa:"/ˈruːɪn/"},
+      {w:"stressed", pos:"adj.", m:"有壓力的", ipa:"/strest/"},
+      {w:"peer pressure", pos:"n.", m:"同儕壓力", ipa:"/pɪə ˈpreʃə/"},
+      {w:"conversation", pos:"n.", m:"對話", ipa:"/ˌkɒnvəˈseɪʃn/"},
+      {w:"practise", pos:"v.", m:"練習", ipa:"/ˈpræktɪs/"},
+      {w:"parrot", pos:"n.", m:"鸚鵡", ipa:"/ˈpærət/"},
+      {w:"pigeon", pos:"n.", m:"鴿子", ipa:"/ˈpɪdʒɪn/"},
+      {w:"elephant", pos:"n.", m:"大象", ipa:"/ˈelɪfənt/"},
+      {w:"giraffe", pos:"n.", m:"長頸鹿", ipa:"/dʒɪˈrɑːf/"},
+      {w:"snail", pos:"n.", m:"蝸牛", ipa:"/sneɪl/"},
+      {w:"dolphin", pos:"n.", m:"海豚", ipa:"/ˈdɒlfɪn/"},
+      {w:"shark", pos:"n.", m:"鯊魚", ipa:"/ʃɑːk/"},
+      {w:"whale", pos:"n.", m:"鯨魚", ipa:"/weɪl/"},
+      {w:"goat", pos:"n.", m:"山羊", ipa:"/ɡəʊt/"},
+      {w:"snake", pos:"n.", m:"蛇", ipa:"/sneɪk/"}
+    ]
+  },
+  dict12: {
+    title: 'Dict 12 · Extra - Insects & More (昆蟲與其他)',
+    words: [
+      {w:"bullied", pos:"v.", m:"被欺凌", ipa:"/ˈbʊlid/"},
+      {w:"champion", pos:"n.", m:"冠軍", ipa:"/ˈtʃæmpiən/"},
+      {w:"medals", pos:"n.", m:"獎牌", ipa:"/ˈmedlz/"},
+      {w:"athlete", pos:"n.", m:"運動員", ipa:"/ˈæθliːt/"},
+      {w:"personality", pos:"n.", m:"個性", ipa:"/ˌpɜːsəˈnæləti/"},
+      {w:"weird", pos:"adj.", m:"奇怪的", ipa:"/wɪəd/"},
+      {w:"interrupted", pos:"v.", m:"打斷", ipa:"/ˌɪntəˈrʌptɪd/"},
+      {w:"victim", pos:"n.", m:"受害者", ipa:"/ˈvɪktɪm/"},
+      {w:"charities", pos:"n.", m:"慈善機構", ipa:"/ˈtʃærətiz/"},
+      {w:"encouraged", pos:"v.", m:"鼓勵", ipa:"/ɪnˈkʌrɪdʒd/"},
+      {w:"ant", pos:"n.", m:"螞蟻", ipa:"/ænt/"},
+      {w:"bee", pos:"n.", m:"蜜蜂", ipa:"/biː/"},
+      {w:"cockroach", pos:"n.", m:"蟑螂", ipa:"/ˈkɒkrəʊtʃ/"},
+      {w:"mosquito", pos:"n.", m:"蚊子", ipa:"/mɒˈskiːtəʊ/"},
+      {w:"spider", pos:"n.", m:"蜘蛛", ipa:"/ˈspaɪdə/"},
+      {w:"fly", pos:"n.", m:"蒼蠅", ipa:"/flaɪ/"},
+      {w:"beetle", pos:"n.", m:"甲蟲", ipa:"/ˈbiːtl/"},
+      {w:"grasshopper", pos:"n.", m:"蚱蜢", ipa:"/ˈɡrɑːshɒpə/"},
+      {w:"butterfly", pos:"n.", m:"蝴蝶", ipa:"/ˈbʌtəflaɪ/"},
+      {w:"firefly", pos:"n.", m:"螢火蟲", ipa:"/ˈfaɪəflaɪ/"}
+    ]
+  }
+};
+
+const readingParagraphs = [
+  {
+    ref: "NTP 1B, p.6 (line 21-25) — 29 words",
+    text: "On the last day of this week-long celebration, climbers will race to the tops of 14-metre-tall towers at midnight and snatch as many ping on buns as they can.",
+    keywords: ["celebration","climbers","race","towers","midnight","snatch","buns"]
+  },
+  {
+    ref: "NTP 1B, p.8 (line 15-21) — 31 words",
+    text: "Releasing an animal back into the wild is another common tradition. There's always a huge water fight on the streets! This year I'll release a fish into the Pa Sak River.",
+    keywords: ["releasing","tradition","water fight","release","river"]
+  },
+  {
+    ref: "NTP 1B, p.70 (line 13-16) — 30 words",
+    text: "To take a truly Insta-worthy photo, go there in the late afternoon for a lovely red and orange sunset. Enjoy the peaceful moment and take in the beauty of nature.",
+    keywords: ["Insta-worthy","afternoon","sunset","peaceful","beauty","nature"]
+  },
+  {
+    ref: "NTP 1B, p.72 (line 10-13) — 28 words",
+    text: "After we settled down, we went to the cafe and treated ourselves to a tasty buffet lunch. Mum and then took part in the popular dessert class.",
+    keywords: ["settled","cafe","buffet","dessert"]
+  },
+  {
+    ref: "NTP 1B, p.96 (line 6-9) — 30 words",
+    text: "Yesterday, she pressurized me to tease a classmate, who had a big spot on her nose. I really didn't want to do that. I don't like being mean to people.",
+    keywords: ["pressurized","tease","classmate","spot","mean"]
+  },
+  {
+    ref: "NTP 1B, p.100 (line 16-21) — 26 words",
+    text: "Despite being bullied, these three people encouraged themselves to keep working hard. Remember: you're never alone. Talk to someone and don't let bullies keep you down.",
+    keywords: ["bullied","encouraged","alone","bullies"]
+  }
+];
+
+const wordFamilies = [
+  {root:"simple", adj:"simple", verb:"simplify", noun:"simplification", adv:"simply"},
+  {root:"symbol", adj:"symbolic", verb:"symbolizes", noun:"symbol", adv:"symbolically"},
+  {root:"together", adj:"together", verb:"—", noun:"togetherness", adv:"together"},
+  {root:"display", adj:"displayed", verb:"display", noun:"display", adv:"—"},
+  {root:"delicious", adj:"delicious", verb:"—", noun:"delicacy", adv:"deliciously"},
+  {root:"decorate", adj:"decorative", verb:"decorate", noun:"decoration", adv:"decoratively"},
+  {root:"trade", adj:"—", verb:"trade", noun:"trade", adv:"—"},
+  {root:"harvest", adj:"—", verb:"harvest", noun:"harvest", adv:"—"},
+  {root:"gather", adj:"—", verb:"gather", noun:"gathering", adv:"—"},
+  {root:"thankful", adj:"thankful", verb:"thank", noun:"thankfulness", adv:"thankfully"},
+  {root:"peace", adj:"peaceful", verb:"—", noun:"peace", adv:"peacefully"},
+  {root:"history", adj:"historic", verb:"—", noun:"history", adv:"historically"},
+  {root:"explore", adj:"explorative", verb:"explore", noun:"exploration", adv:"—"},
+  {root:"comfort", adj:"comfortable", verb:"comfort", noun:"comfort", adv:"comfortably"},
+  {root:"true", adj:"true", verb:"—", noun:"truth", adv:"truly"},
+  {root:"satisfy", adj:"satisfying/satisfied", verb:"satisfy", noun:"satisfaction", adv:"satisfactorily"},
+  {root:"promote", adj:"promotional", verb:"promote", noun:"promotion", adv:"—"},
+  {root:"opposite", adj:"opposite", verb:"—", noun:"opposite", adv:"oppositely"},
+  {root:"discover", adj:"—", verb:"discover", noun:"discovery", adv:"—"},
+  {root:"amaze", adj:"amazing/amazed", verb:"amaze", noun:"amazement", adv:"amazingly"},
+  {root:"awful", adj:"awful", verb:"—", noun:"awfulness", adv:"awfully"},
+  {root:"tease", adj:"—", verb:"tease", noun:"tease", adv:"—"},
+  {root:"guilty", adj:"guilty", verb:"—", noun:"guiltiness", adv:"guiltily"},
+  {root:"stress", adj:"stressed/stressful", verb:"stress", noun:"stress", adv:"stressfully"},
+  {root:"practise", adj:"—", verb:"practise", noun:"practice", adv:"—"},
+  {root:"bully", adj:"—", verb:"bully", noun:"bully", adv:"—"},
+  {root:"athlete", adj:"athletic", verb:"—", noun:"athlete", adv:"—"},
+  {root:"interrupt", adj:"—", verb:"interrupt", noun:"interruption", adv:"—"},
+  {root:"charity", adj:"charitable", verb:"—", noun:"charity", adv:"—"},
+  {root:"encourage", adj:"encouraging", verb:"encourage", noun:"encouragement", adv:"—"}
+];
+
+// ============================================================
+// AUDIO (Web Speech API)
+// ============================================================
+
+let currentAccent = 'en-GB';
+const synth = window.speechSynthesis;
+
+function speak(text, btn) {
+  synth.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = currentAccent;
+  utter.rate = 0.85;
+  utter.pitch = 1;
+
+  if (btn) {
+    btn.classList.add('playing');
+    utter.onend = () => btn.classList.remove('playing');
+    utter.onerror = () => btn.classList.remove('playing');
+  }
+
+  synth.speak(utter);
+  showToast('Playing: ' + text);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+// ============================================================
+// RENDER FUNCTIONS
+// ============================================================
+
+function createVocabCard(wordData, idx) {
+  const div = document.createElement('div');
+  div.className = 'vocab-card';
+  div.setAttribute('data-word', wordData.w.toLowerCase());
+
+  const numSpan = document.createElement('span');
+  numSpan.className = 'num';
+  numSpan.textContent = idx + 1;
+
+  const infoDiv = document.createElement('div');
+  infoDiv.className = 'info';
+
+  const wordSpan = document.createElement('div');
+  wordSpan.className = 'word';
+  wordSpan.innerHTML = `${wordData.w} <span class="pos">${wordData.pos}</span>`;
+
+  const meaningDiv = document.createElement('div');
+  meaningDiv.className = 'meaning';
+  meaningDiv.innerHTML = `${wordData.m} <span class="ipa-tooltip">${wordData.ipa}</span>`;
+
+  infoDiv.appendChild(wordSpan);
+  infoDiv.appendChild(meaningDiv);
+
+  const speakBtn = document.createElement('button');
+  speakBtn.className = 'speak-btn';
+  speakBtn.title = '聆聽發音 (英音)';
+  speakBtn.innerHTML = '🔊';
+  speakBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    speak(wordData.w, speakBtn);
+  });
+
+  const gtLink = document.createElement('a');
+  gtLink.className = 'gt-link';
+  gtLink.title = '在 Google Translate 查看口型發音';
+  gtLink.innerHTML = 'G';
+  gtLink.href = `https://translate.google.com/?sl=en&tl=zh-TW&text=${encodeURIComponent(wordData.w)}&op=translate`;
+  gtLink.target = '_blank';
+
+  div.appendChild(numSpan);
+  div.appendChild(infoDiv);
+  div.appendChild(speakBtn);
+  div.appendChild(gtLink);
+
+  // Click card to speak
+  div.addEventListener('click', () => speak(wordData.w, speakBtn));
+
+  return div;
+}
+
+function renderVocabSection(sectionId, dictKey) {
+  const section = document.getElementById('section-' + sectionId);
+  const data = dictData[dictKey];
+  const grid = document.createElement('div');
+  grid.className = 'vocab-grid';
+  grid.id = 'grid-' + sectionId;
+
+  data.words.forEach((w, i) => {
+    grid.appendChild(createVocabCard(w, i));
+  });
+
+  section.innerHTML = '';
+  const title = document.createElement('h2');
+  title.style.cssText = 'font-size:1.2rem;margin-bottom:16px;color:var(--accent-light);';
+  title.textContent = data.title + ` (${data.words.length} words)`;
+  section.appendChild(title);
+  section.appendChild(grid);
+}
+
+function renderReadingSection() {
+  const section = document.getElementById('section-reading');
+  section.innerHTML = '<h2 style="font-size:1.2rem;margin-bottom:16px;color:var(--orange);">朗讀篇章 (Reading Aloud)</h2>';
+
+  readingParagraphs.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'paragraph-card';
+
+    const ref = document.createElement('div');
+    ref.className = 'ref';
+    ref.textContent = p.ref;
+
+    const text = document.createElement('div');
+    text.className = 'text';
+    let html = p.text;
+    p.keywords.forEach(kw => {
+      const regex = new RegExp(`(${kw})`, 'gi');
+      html = html.replace(regex, '<span class="highlight">$1</span>');
+    });
+    text.innerHTML = html;
+
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+
+    const playBtn = document.createElement('button');
+    playBtn.className = 'btn btn-primary';
+    playBtn.innerHTML = '🔊 朗讀全文';
+    playBtn.addEventListener('click', () => speak(p.text, playBtn));
+
+    const slowBtn = document.createElement('button');
+    slowBtn.className = 'btn btn-outline';
+    slowBtn.innerHTML = '🐢 慢速朗讀';
+    slowBtn.addEventListener('click', () => {
+      const utter = new SpeechSynthesisUtterance(p.text);
+      utter.lang = currentAccent;
+      utter.rate = 0.6;
+      utter.pitch = 1;
+      synth.cancel();
+      synth.speak(utter);
+      showToast('慢速朗讀中...');
+    });
+
+    actions.appendChild(playBtn);
+    actions.appendChild(slowBtn);
+
+    card.appendChild(ref);
+    card.appendChild(text);
+    card.appendChild(actions);
+    section.appendChild(card);
+  });
+}
+
+function renderWordFamilySection() {
+  const section = document.getElementById('section-wordfamily');
+  section.innerHTML = '<h2 style="font-size:1.2rem;margin-bottom:16px;color:var(--purple);">詞性轉換表 (Parts of Speech)</h2>';
+
+  const table = document.createElement('table');
+  table.className = 'family-table';
+
+  const thead = document.createElement('thead');
+  thead.innerHTML = `<tr>
+    <th>Root</th><th>Adjective 形容詞</th><th>Verb 動詞</th><th>Noun 名詞</th><th>Adverb 副詞</th>
+  </tr>`;
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  wordFamilies.forEach(f => {
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td class="root">${f.root}</td>
+      <td class="word-cell" onclick="speakWord(this)">${f.adj}</td>
+      <td class="word-cell" onclick="speakWord(this)">${f.verb}</td>
+      <td class="word-cell" onclick="speakWord(this)">${f.noun}</td>
+      <td class="word-cell" onclick="speakWord(this)">${f.adv}</td>
+    `;
+    tbody.appendChild(row);
+  });
+  table.appendChild(tbody);
+  section.appendChild(table);
+
+  const note = document.createElement('p');
+  note.style.cssText = 'font-size:0.8rem;color:var(--text-secondary);margin-top:8px;';
+  note.textContent = '提示: 點擊任何詞彙即可聆聽英式發音';
+  section.appendChild(note);
+}
+
+// Fallback speak for word family cells
+window.speakWord = function(cell) {
+  const text = cell.textContent.trim();
+  if (text && text !== '—') {
+    synth.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = currentAccent;
+    utter.rate = 0.85;
+    synth.speak(utter);
+    showToast('Playing: ' + text);
+  }
+};
+
+// ============================================================
+// RENDER ALL SECTION
+// ============================================================
+
+function renderAllSection() {
+  const section = document.getElementById('section-all');
+  section.innerHTML = '';
+
+  Object.keys(dictData).forEach((key, di) => {
+    const data = dictData[key];
+    const title = document.createElement('h2');
+    title.style.cssText = 'font-size:1.1rem;margin:20px 0 12px;color:var(--accent-light);border-bottom:1px solid var(--border);padding-bottom:8px;';
+    title.textContent = data.title + ` (${data.words.length} words)`;
+    section.appendChild(title);
+
+    const grid = document.createElement('div');
+    grid.className = 'vocab-grid';
+    grid.setAttribute('data-dict', key);
+
+    data.words.forEach((w, i) => {
+      grid.appendChild(createVocabCard(w, i));
+    });
+
+    section.appendChild(grid);
+  });
+
+  // Also add reading paragraphs in all section
+  const sepTitle = document.createElement('h2');
+  sepTitle.style.cssText = 'font-size:1.1rem;margin:20px 0 12px;color:var(--orange);border-bottom:1px solid var(--border);padding-bottom:8px;';
+  sepTitle.textContent = '朗讀篇章 (Reading Aloud)';
+  section.appendChild(sepTitle);
+
+  readingParagraphs.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'paragraph-card';
+    card.style.marginBottom = '12px';
+    card.innerHTML = `<div class="ref">${p.ref}</div><div class="text">${p.text}</div>`;
+    section.appendChild(card);
+  });
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+
+document.getElementById('searchInput').addEventListener('input', function(e) {
+  const query = e.target.value.toLowerCase().trim();
+  const activeSection = document.querySelector('.section.active');
+  const cards = activeSection.querySelectorAll('.vocab-card');
+
+  cards.forEach(card => {
+    const word = card.getAttribute('data-word') || '';
+    if (query === '' || word.includes(query)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  updateStats(activeSection);
+});
+
+// ============================================================
+// TABS
+// ============================================================
+
+document.getElementById('tabBar').addEventListener('click', function(e) {
+  if (!e.target.classList.contains('tab')) return;
+
+  const tab = e.target;
+  const tabName = tab.getAttribute('data-tab');
+
+  // Update active tab
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+
+  // Show section
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + tabName).classList.add('active');
+
+  // Clear search
+  document.getElementById('searchInput').value = '';
+
+  updateStats(document.getElementById('section-' + tabName));
+});
+
+// ============================================================
+// STATS
+// ============================================================
+
+function updateStats(section) {
+  const totalCards = section.querySelectorAll('.vocab-card').length;
+  const visibleCards = section.querySelectorAll('.vocab-card[style*="display:"]').length;
+  // Actually count visible ones
+  let visible = 0;
+  section.querySelectorAll('.vocab-card').forEach(c => {
+    if (c.style.display !== 'none') visible++;
+  });
+
+  const statsRow = document.getElementById('statsRow');
+  statsRow.innerHTML = `
+    <div class="stat">
+      <div class="stat-num">${visible}</div>
+      <div class="stat-label">顯示詞彙</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">${totalCards}</div>
+      <div class="stat-label">總詞彙量</div>
+    </div>
+  `;
+}
+
+// ============================================================
+// ACCENT
+// ============================================================
+
+document.getElementById('accentSelect').addEventListener('change', function() {
+  currentAccent = this.value;
+  synth.cancel();
+  showToast('已切換為: ' + (currentAccent === 'en-GB' ? '英式發音' : '美式發音'));
+});
+
+// ============================================================
+// MODE TOGGLE
+// ============================================================
+
+document.getElementById('modeToggle').addEventListener('click', function(e) {
+  if (!e.target.classList.contains('mode-btn')) return;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+
+  const mode = e.target.getAttribute('data-mode');
+  document.querySelectorAll('.vocab-grid').forEach(grid => {
+    grid.style.gridTemplateColumns = mode === 'list' ? '1fr' : 'repeat(auto-fill, minmax(280px, 1fr))';
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+
+(function init() {
+  // Render individual dict sections
+  Object.keys(dictData).forEach(key => {
+    renderVocabSection(key, key);
+  });
+
+  // Render all-in-one
+  renderAllSection();
+
+  // Render reading
+  renderReadingSection();
+
+  // Render word family
+  renderWordFamilySection();
+
+  // Init stats
+  updateStats(document.getElementById('section-all'));
+
+  console.log('Listening Vocabulary Tool Initialized!');
+  console.log('Total words: 120 | Paragraphs: 6 | Word Families: 30');
+})();
+</script>
+
+</body>
+</html>
